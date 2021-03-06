@@ -171,3 +171,36 @@ call INSERT_CAT ('per', 3, 1, 5, 2);
 call INSERT_CAT ('coma', 3, 1, 5, 1);
 call INSERT_CAT ('sprite', 3, 1, 5, 2);
 
+
+CREATE OR REPLACE VIEW CATS AS SELECT P.*, C.livecount FROM pet P JOIN cat C on P.pet_id = C.cat_id;
+CREATE OR REPLACE VIEW DOGS AS SELECT P.*, D.BarkPitch FROM pet P JOIN dog D on P.pet_id = D.dog_id;
+CREATE OR REPLACE VIEW PETS AS  SELECT P.*, C.livecount, D.BarkPitch, B.singing_frequency, F.fresh_water, H.popularity, R.egg_count , 
+T.slowness  FROM pet as P 
+    LEFT OUTER JOIN cat as C on P.pet_id = C.cat_id
+    LEFT OUTER JOIN dog as D on P.pet_id = D.dog_id
+    left outer join  bird as B on P.pet_id = B.bird_id
+    left outer join fish as F on P.pet_id = F.fish_id 
+    left outer join horse as H on P.pet_id = H.horse_id
+    left outer join reptile as R on P.pet_id = R.reptile_id
+    left outer join turtle as T on P.pet_id = T.turtle_id;
+
+
+CREATE OR REPLACE PROCEDURE UPDATE_CAT_AND_DOG (
+    name_pet VARCHAR,
+    age_pet INTEGER,
+    pet_vet_id_ref_pet integer,
+    pet_id_ex integer,
+    pet_unique_value integer,
+    pet_caretaker_id integer
+)
+LANGUAGE plpgsql
+AS $$
+begin
+  update cat c set livecount = pet_unique_value where pet_id_ex = c.cat_id;
+  update dog d set barkpitch = pet_unique_value where pet_id_ex = d.dog_id;
+  update pet p set name = name_pet, age = age_pet, pet_vet_id_ref = pet_vet_id_ref_pet where p.pet_id = pet_id_ex;
+  update caretake_pet_ref set caretaker_id = pet_caretaker_id where pet_id = pet_id_ex; --vi kan videre udbygge den
+  -- så den kun vil kunne updatere hunde og katte
+END; $$;
+
+call UPDATE_CAT_AND_DOG('felix', 4, 1, 1, 5, 1);

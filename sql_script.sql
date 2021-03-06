@@ -25,3 +25,6 @@ create table if not exists public.Bird(bird_id integer references pet, singing_f
 create table if not exists public.Turtle(turtle_id integer references pet, slowness integer not null);
 
 create table if not exists public.Reptile(reptile_id integer references pet, egg_count integer not null);
+
+
+
