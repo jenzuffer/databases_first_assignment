@@ -13,3 +13,5 @@ revoke all privileges on public.pet from davide;
 revoke all privileges on public.reptile from davide;
 revoke all privileges on public.turtle from davide;
 revoke all privileges on public.vet from davide;
+
+grant select on pets to davide;

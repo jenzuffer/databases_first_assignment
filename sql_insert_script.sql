@@ -18,9 +18,9 @@ CREATE OR REPLACE PROCEDURE INSERT_CAT (
     livecount INTEGER,
     caretaker_id INTEGER
 )
-LANGUAGE plpgsql
+LANGUAGE plpgsql SECURITY DEFINER
 AS $$
-BEGIN
+begin
   WITH NEW_CAT AS(
     INSERT INTO pet(pet_id, name, age, pet_vet_id_ref) VALUES ((select COUNT(*) + 1 from pet), name, age, pet_vet_id_ref) returning pet_id
   )
@@ -36,9 +36,9 @@ CREATE OR REPLACE PROCEDURE INSERT_DOG (
     barkpitch INTEGER,
     caretaker_id INTEGER
 )
-LANGUAGE plpgsql
+LANGUAGE plpgsql SECURITY DEFINER
 AS $$
-BEGIN
+begin
   WITH NEW_DOG AS(
     INSERT INTO pet(pet_id, name, age, pet_vet_id_ref) VALUES ((select COUNT(*) + 1 from pet), name, age, pet_vet_id_ref) RETURNING pet_id
   )
@@ -53,7 +53,7 @@ CREATE OR REPLACE PROCEDURE INSERT_BIRD (
     singing_frequency INTEGER,
     caretaker_id integer
 )
-LANGUAGE plpgsql
+LANGUAGE plpgsql SECURITY DEFINER
 AS $$
 BEGIN
   WITH NEW_BIRD AS(
@@ -70,7 +70,7 @@ CREATE OR REPLACE PROCEDURE INSERT_FISH (
     fresh_water INTEGER,
     caretaker_id integer
 )
-LANGUAGE plpgsql
+LANGUAGE plpgsql SECURITY DEFINER
 AS $$
 BEGIN
   WITH NEW_FISH AS(
@@ -87,7 +87,7 @@ CREATE OR REPLACE PROCEDURE INSERT_HORSE (
     popularity INTEGER,
     caretaker_id integer
 )
-LANGUAGE plpgsql
+LANGUAGE plpgsql SECURITY DEFINER
 AS $$
 BEGIN
   WITH NEW_HORSE AS(
@@ -104,7 +104,7 @@ CREATE OR REPLACE PROCEDURE INSERT_REPTILE (
     egg_count INTEGER,
     caretaker_id integer
 )
-LANGUAGE plpgsql
+LANGUAGE plpgsql SECURITY DEFINER
 AS $$
 BEGIN
   WITH NEW_REPTILE AS(
@@ -121,7 +121,7 @@ CREATE OR REPLACE PROCEDURE INSERT_TURTLE (
     slowness INTEGER,
     caretaker_id integer
 )
-LANGUAGE plpgsql
+LANGUAGE plpgsql SECURITY DEFINER
 AS $$
 BEGIN
   WITH NEW_TURTLE AS(
@@ -172,6 +172,7 @@ call INSERT_CAT ('coma', 3, 1, 5, 1);
 call INSERT_CAT ('sprite', 3, 1, 5, 2);
 
 
+
 CREATE OR REPLACE VIEW CATS AS SELECT P.*, C.livecount FROM pet P JOIN cat C on P.pet_id = C.cat_id;
 CREATE OR REPLACE VIEW DOGS AS SELECT P.*, D.BarkPitch FROM pet P JOIN dog D on P.pet_id = D.dog_id;
 CREATE OR REPLACE VIEW PETS AS  SELECT P.*, C.livecount, D.BarkPitch, B.singing_frequency, F.fresh_water, H.popularity, R.egg_count , 
@@ -204,3 +205,4 @@ begin
 END; $$;
 
 call UPDATE_CAT_AND_DOG('felix', 4, 1, 1, 5, 1);
+
